@@ -1,11 +1,42 @@
+# Dependencies
 node_modules/
+/server/node_modules/
+/client/node_modules/
+
+# Production / Build
 dist/
-.env*
-.env.example*
+/server/dist/
+/client/dist/
+build/
+
+# Secrets / Credentials
+.env
+.env.local
+.env.*.local
+*.env
+/server/.env
+/client/.env
+!/client/.env.example
+!/server/.env.example
+!.env.example
+
+# Lockfiles (as per your preference)
+bun.lock
+package-lock.json*
+
+# OS / Editor Files
 .DS_Store
-server/node_modules/
-client/node_modules/
-server/dist/
-client/dist/
-server/uploads/
+.DS_Store?
+Thumbs.db
+.idea/
+.vscode/
+
+# Uploads
+/server/uploads/*
+!/server/uploads/.gitkeep
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
