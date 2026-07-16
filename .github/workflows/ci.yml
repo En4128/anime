@@ -53,8 +53,8 @@ jobs:
     name: Build, Scan & Push Docker Images
     needs: lint-and-test
     runs-on: ubuntu-latest
-    # Only push images when code is pushed/merged to main (skip during PR)
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Only push images when code is pushed/merged to master (skip during PR)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     
     steps:
       - name: Checkout repository
