@@ -13,6 +13,7 @@ export default {
       fontFamily: {
         display: ['Poppins', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
+        righteous: ['Righteous', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         glow: '0 0 20px rgba(255, 107, 0, 0.35)',
@@ -29,6 +30,7 @@ export default {
         'marquee': 'marquee 25s linear infinite',
         'marquee-reverse': 'marqueeReverse 25s linear infinite',
         'ken-burns': 'kenBurns 20s ease-in-out infinite alternate',
+        'shine': 'shine 0.8s ease-out',
       },
       keyframes: {
         fadeIn: {
@@ -50,6 +52,10 @@ export default {
         kenBurns: {
           '0%': { transform: 'scale(1)' },
           '100%': { transform: 'scale(1.1)' },
+        },
+        shine: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
       },
     },

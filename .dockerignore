@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+dist
+**/dist
+.git
+.github
+*.log
+.env
+*.env
+k8s/secrets.yaml
+bun.lock
+package-lock.json
+build
+.vscode
+.idea
+uploads
+**/uploads

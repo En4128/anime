@@ -37,14 +37,14 @@ const ContinueWatchingList = ({ items = [] }) => {
 
   return (
     <section className="mt-10 space-y-4">
-      <h2 className="font-display text-2xl">Continue Watching</h2>
+      <h2 className="font-righteous text-2xl font-bold tracking-wide text-white">Continue Watching</h2>
       {loading && <Loader message="Fetching titles..." />}
       <div className="grid gap-4 md:grid-cols-2">
         {Object.values(details).map((item) => (
           <Link
             key={item.anime._id}
             to={`/watch/${item.anime._id}/${item.episode}`}
-            className="flex gap-4 rounded-2xl border border-white/5 bg-secondary/30 p-4 hover:border-primary"
+            className="flex gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:bg-white/[0.04] hover:shadow-[0_12px_24px_-10px_rgba(255,107,0,0.2)] cursor-pointer"
           >
             <img
               src={item.anime.posterImage}

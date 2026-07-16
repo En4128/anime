@@ -59,7 +59,7 @@ const SidebarItem = ({ item, index }) => {
 const TopAiringSidebar = ({ items = [] }) => {
   return (
     <div className="rounded-2xl bg-secondary-light/30 p-6 ring-1 ring-white/5">
-      <h3 className="mb-6 font-display text-xl font-bold text-white">Top Airing</h3>
+      <h3 className="mb-6 font-righteous text-xl font-bold tracking-wide text-white">Top Airing</h3>
       <div className="space-y-5">
         {items.slice(0, 5).map((item, index) => (
           <SidebarItem key={item._id} item={item} index={index} />
@@ -67,7 +67,7 @@ const TopAiringSidebar = ({ items = [] }) => {
       </div>
       <Link
         to="/browse?sort=trending"
-        className="mt-8 block w-full rounded-xl bg-white/5 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-white/10"
+        className="mt-8 block w-full rounded-xl bg-white/5 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-white/10 cursor-pointer"
       >
         View Full List
       </Link>

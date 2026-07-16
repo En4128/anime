@@ -5,7 +5,7 @@ const CarouselRow = ({ title, description, items = [], onLike, likedIds = [] }) 
   return (
     <section className="space-y-4">
       <div className="flex flex-col gap-1 px-1">
-        <h2 className="font-display text-2xl font-bold tracking-wide text-white md:text-3xl">
+        <h2 className="font-righteous text-2xl font-bold tracking-wider text-white md:text-3xl">
           {title}
         </h2>
         {description && (

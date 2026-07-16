@@ -20,7 +20,7 @@ const AnimeCard = ({ anime, onLike, isLiked, index = 0 }) => {
   const gradient = FALLBACK_COLORS[index % FALLBACK_COLORS.length];
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent">
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/20 hover:shadow-[0_12px_32px_-8px_rgba(255,107,0,0.3)] cursor-pointer">
       {/* Poster Image */}
       <div className="relative overflow-hidden rounded-t-2xl aspect-[2/3]">
         {anime.posterImage && !imgError ? (
@@ -43,7 +43,7 @@ const AnimeCard = ({ anime, onLike, isLiked, index = 0 }) => {
           to={`/anime/${anime.slug}`}
           className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-glow">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-glow transition-transform duration-300 group-hover:scale-110">
             <PlayIcon className="h-6 w-6 text-secondary" />
           </div>
         </Link>
@@ -53,12 +53,16 @@ const AnimeCard = ({ anime, onLike, isLiked, index = 0 }) => {
           <button
             type="button"
             className={clsx(
-              'absolute right-2 top-2 rounded-full border p-1.5 backdrop-blur-sm transition',
+              'absolute right-2 top-2 rounded-full border p-1.5 backdrop-blur-sm transition-all duration-200 cursor-pointer active:scale-95 z-20',
               isLiked
-                ? 'border-primary/60 bg-primary/30 text-primary'
-                : 'border-white/20 bg-black/40 text-white/60 hover:text-primary'
+                ? 'border-primary/60 bg-primary/30 text-primary scale-110 shadow-glow'
+                : 'border-white/20 bg-black/40 text-white/60 hover:text-primary hover:scale-110'
             )}
-            onClick={() => onLike(anime._id)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onLike(anime._id);
+            }}
           >
             <HeartIcon className="h-3.5 w-3.5" />
           </button>

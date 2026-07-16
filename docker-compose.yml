@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------
+  # Server (Express Backend API)
+  # ----------------------------------------------------
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: animeverse-server
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - CLIENT_URL=http://localhost  # The client container exposes port 80 (http://localhost)
+    env_file:
+      - ./server/.env
+    volumes:
+      - server-uploads:/usr/src/app/uploads
+    networks:
+      - anime-network
+
+  # ----------------------------------------------------
+  # Client (React Frontend App)
+  # ----------------------------------------------------
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        # Pass backend API URL at build time so React compiles it in
+        - VITE_API_URL=http://localhost:5000/api/v1
+    container_name: animeverse-client
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - anime-network
+
+# Define persistent volume for uploading media files
+volumes:
+  server-uploads:
+  
+
+# Define network to connect client and server containers
+networks:
+  anime-network:

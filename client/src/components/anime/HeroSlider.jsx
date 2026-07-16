@@ -68,7 +68,7 @@ const HeroSlider = ({ items = [] }) => {
             </span>
           </div>
 
-          <h1 className="font-display text-4xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
+          <h1 className="font-righteous text-4xl font-bold leading-tight text-white md:text-6xl lg:text-7xl drop-shadow-[0_0_15px_rgba(255,107,0,0.2)]">
             {active.title}
           </h1>
 
@@ -87,14 +87,14 @@ const HeroSlider = ({ items = [] }) => {
           <div className="flex items-center gap-4 pt-2">
             <Link
               to={`/anime/${active.slug}`}
-              className="group relative overflow-hidden rounded-full bg-primary px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105 hover:shadow-glow"
+              className="group relative overflow-hidden rounded-full bg-primary px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105 hover:shadow-glow cursor-pointer"
             >
               <span className="relative z-10">Watch Now</span>
               <div className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0" />
             </Link>
             <Link
               to="/browse"
-              className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/10"
+              className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/10 cursor-pointer"
             >
               <span>More Info</span>
               <ChevronRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -107,13 +107,13 @@ const HeroSlider = ({ items = [] }) => {
       <div className="absolute bottom-8 right-8 flex gap-4">
         <button
           onClick={() => navigate('prev')}
-          className="group rounded-full border border-white/10 bg-black/20 p-3 text-white backdrop-blur-md transition hover:bg-primary hover:border-primary"
+          className="group rounded-full border border-white/10 bg-black/20 p-3 text-white backdrop-blur-md transition hover:bg-primary hover:border-primary cursor-pointer active:scale-90"
         >
           <ChevronLeftIcon className="h-6 w-6" />
         </button>
         <button
           onClick={() => navigate('next')}
-          className="group rounded-full border border-white/10 bg-black/20 p-3 text-white backdrop-blur-md transition hover:bg-primary hover:border-primary"
+          className="group rounded-full border border-white/10 bg-black/20 p-3 text-white backdrop-blur-md transition hover:bg-primary hover:border-primary cursor-pointer active:scale-90"
         >
           <ChevronRightIcon className="h-6 w-6" />
         </button>
@@ -125,7 +125,7 @@ const HeroSlider = ({ items = [] }) => {
           <button
             key={idx}
             onClick={() => setIndex(idx)}
-            className={`h-1.5 transition-all duration-300 rounded-full ${idx === index ? 'w-8 bg-primary' : 'w-2 bg-white/20 hover:bg-white/40'}`}
+            className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${idx === index ? 'w-8 bg-primary' : 'w-2 bg-white/20 hover:bg-white/40'}`}
           />
         ))}
       </div>

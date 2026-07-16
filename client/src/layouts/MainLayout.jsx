@@ -4,7 +4,7 @@ import Footer from '../components/layout/Footer.jsx';
 const MainLayout = ({ children }) => (
   <div className="min-h-screen bg-[#05060a] text-white">
     <Navbar />
-    <main className="mx-auto w-full max-w-7xl px-4 py-8">{children}</main>
+    <main className="mx-auto w-full max-w-7xl px-4 pt-28 pb-8">{children}</main>
     <Footer />
   </div>
 );

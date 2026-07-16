@@ -96,10 +96,11 @@ const HomePage = () => {
               <TopAiringSidebar items={sections.popular} />
               
               {/* Optional: Newsletter or Mobile App Promo Card */}
-              <div className="rounded-2xl bg-gradient-to-br from-primary to-purple-600 p-6 shadow-xl">
-                <h4 className="text-xl font-bold text-white">Join our Discord</h4>
-                <p className="mt-2 text-sm text-white/80">Connect with fellow anime lovers and get instant updates!</p>
-                <button className="mt-4 w-full rounded-xl bg-white px-4 py-2 text-sm font-bold text-primary shadow-lg transition-transform hover:scale-105 active:scale-95">
+              <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/45 p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(255,107,0,0.15)]">
+                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/20 blur-2xl transition-all duration-500 group-hover:bg-primary/30" />
+                <h4 className="font-righteous text-xl font-bold text-white tracking-wide">Join our Discord</h4>
+                <p className="mt-2 text-sm text-white/50 leading-relaxed">Connect with fellow anime lovers and get instant updates!</p>
+                <button className="mt-5 w-full rounded-xl bg-gradient-to-r from-primary to-accent py-2.5 text-sm font-bold text-secondary shadow-lg hover:shadow-primary/30 hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 cursor-pointer">
                   Join Now
                 </button>
               </div>
