@@ -1,0 +1,9 @@
+# .trivyignore
+# These CVEs are in Node.js base image bundled tools (npm/corepack), not in application code.
+# They are suppressed here as they are not exploitable in our runtime context.
+
+# picomatch: ReDoS via crafted extglob patterns (in bundled npm)
+CVE-2026-33671
+
+# sigstore: Unauthorized certs due to ignored certificateOIDs (in bundled npm)
+CVE-2026-48815

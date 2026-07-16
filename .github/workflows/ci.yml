@@ -89,6 +89,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          trivyignores: './server/.trivyignore'
 
       - name: Push Backend Image
         # Runs only if Trivy scan passed
