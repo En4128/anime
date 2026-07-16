@@ -17,8 +17,8 @@ if (env.nodeEnv === 'test') {
   };
 
   const makeQuery = (table) => {
-    let data = store[table] || [];
-    let filters = [];
+    const data = store[table] || [];
+    const filters = [];
     let isWrite = false;
     let writePayload = null;
     let writeOp = null; // 'insert', 'update', 'delete'
@@ -28,7 +28,7 @@ if (env.nodeEnv === 'test') {
     let isCount = false;
 
     const executeWrite = () => {
-      let filtered = data.filter(item => filters.every(f => f(item)));
+      const filtered = data.filter(item => filters.every(f => f(item)));
       if (writeOp === 'insert') {
         const records = Array.isArray(writePayload) ? writePayload : [writePayload];
         const inserted = records.map(r => {
@@ -85,7 +85,7 @@ if (env.nodeEnv === 'test') {
       },
       filter: (field, op, val) => {
         if (op === 'ov') {
-          const cleanedVal = val.replace(/[\{\}]/g, '');
+          const cleanedVal = val.replace(/[{}]/g, '');
           const searchArray = cleanedVal ? cleanedVal.split(',') : [];
           filters.push(item => {
             const itemArray = Array.isArray(item[field]) ? item[field] : [];
@@ -128,13 +128,13 @@ if (env.nodeEnv === 'test') {
           }
           return { data: res, error: null };
         }
-        let filtered = data.filter(item => filters.every(f => f(item)));
+        const filtered = data.filter(item => filters.every(f => f(item)));
         if (filtered.length === 0) {
           return { data: null, error: { message: 'Not found', code: 'PGRST116' } };
         }
         return { data: filtered[0], error: null };
       },
-      then: (resolve, reject) => {
+      then: (resolve) => {
         if (isWrite) {
           const res = executeWrite();
           return resolve({ data: res, error: null });
