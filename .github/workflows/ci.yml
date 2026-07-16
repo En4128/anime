@@ -1,0 +1,149 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  NODE_VERSION: "22.x"
+  FRONTEND_IMAGE: anime-client
+  BACKEND_IMAGE: anime-server
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: |
+            server/package-lock.json
+            client/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Install frontend dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Run Backend Linter
+        working-directory: ./server
+        run: npm run lint
+
+      # Note: Uncomment once ESLint is installed and configured in the client directory
+      # - name: Run Frontend Linter
+      #   working-directory: ./client
+      #   run: npm run lint
+
+      - name: Run Backend Unit Tests
+        working-directory: ./server
+        run: npm test
+
+  build-scan-push:
+    name: Build, Scan & Push Docker Images
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    # Only push images when code is pushed/merged to main (skip during PR)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # ----------------------------------------------------
+      # BACKEND IMAGE
+      # ----------------------------------------------------
+      - name: Build Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          load: true # Load into local Docker daemon for Trivy scanning
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+
+      - name: Run Trivy scan on Backend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1' # Fails the pipeline on HIGH/CRITICAL vulnerabilities
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Push Backend Image
+        # Runs only if Trivy scan passed
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE }}:latest
+
+      # ----------------------------------------------------
+      # FRONTEND IMAGE
+      # ----------------------------------------------------
+      - name: Build Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./client
+          file: ./client/Dockerfile
+          load: true # Load into local Docker daemon for Trivy scanning
+          build-args: |
+            VITE_API_URL=/api/v1
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+
+      - name: Run Trivy scan on Frontend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1' # Fails the pipeline on HIGH/CRITICAL vulnerabilities
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Push Frontend Image
+        # Runs only if Trivy scan passed
+        uses: docker/build-push-action@v5
+        with:
+          context: ./client
+          file: ./client/Dockerfile
+          push: true
+          build-args: |
+            VITE_API_URL=/api/v1
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest
+
+      # ----------------------------------------------------
+      # ARTIFACTS / LOGS (Executes if previous steps fail)
+      # ----------------------------------------------------
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-failure-logs
+          path: ~/.npm/_logs/
+          retention-days: 5
